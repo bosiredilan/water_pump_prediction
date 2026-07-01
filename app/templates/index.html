@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Water Pump Prediction</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f172a, #1e3a8a, #0ea5e9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(18px);
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+            color: white;
+        }
+
+        .title {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .title h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .title p {
+            color: #dbeafe;
+            font-size: 1.1rem;
+        }
+
+        form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 22px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #f8fafc;
+        }
+
+        input,
+        select {
+            padding: 14px 16px;
+            border: none;
+            border-radius: 14px;
+            background: rgba(255,255,255,0.18);
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s ease;
+        }
+
+        input::placeholder {
+            color: #dbeafe;
+        }
+
+        input:focus,
+        select:focus {
+            background: rgba(255,255,255,0.28);
+            transform: scale(1.02);
+            box-shadow: 0 0 12px rgba(255,255,255,0.3);
+        }
+
+        select option {
+            color: black;
+        }
+
+        .button-container {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 16px 40px;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #38bdf8, #2563eb);
+            color: white;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.25);
+        }
+
+        button:hover {
+            transform: translateY(-3px) scale(1.03);
+            background: linear-gradient(135deg, #0ea5e9, #1d4ed8);
+        }
+
+        .result {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #fef9c3;
+        }
+
+        @media (max-width: 768px) {
+            .title h1 {
+                font-size: 2.2rem;
+            }
+
+            .container {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="title">
+        <h1>💧 Water Pump Predictor</h1>
+        <p>Predict water pump functionality using machine learning</p>
+    </div>
+
+    <form action="/predict" method="POST">
+
+        <!-- Numeric Inputs -->
+
+        <div class="input-group">
+            <label>Amount TSH</label>
+            <input type="number" name="amount_tsh" id="amount_tsh" placeholder="Enter amount" required>
+        </div>
+
+        <div class="input-group">
+            <label>GPS Height</label>
+            <input type="number" name="gps_height" id="gps_height" placeholder="Enter GPS height" required>
+        </div>
+
+        <div class="input-group">
+            <label>Longitude</label>
+            <input type="number" step="any" name="longitude" id="longitude" placeholder="Enter longitude" required>
+        </div>
+
+        <div class="input-group">
+            <label>Latitude</label>
+            <input type="number" step="any" name="latitude" id="latitude" placeholder="Enter latitude" required>
+        </div>
+
+        <div class="input-group">
+            <label>Population</label>
+            <input type="number" name="population" id="population" placeholder="Enter population" required>
+        </div>
+
+        <div class="input-group">
+            <label>Construction Year</label>
+            <input type="number" name="construction_year" id="construction_year" placeholder="Enter construction year" required>
+        </div>
+
+        <div class="input-group">
+            <label>Date Recorded</label>
+            <input type="date" name="date_recorded" id="date_recorded" required>
+        </div>
+
+        <!-- Text Inputs -->
+
+        <div class="input-group">
+            <label>Basin</label>
+            <select name="basin" id="basin" required>
+              <option value="" selected disabled>Select Basin</option>
+              
+              <option value="Lake Victoria">Lake Victoria</option>
+              <option value="Pangani">Pangani</option>
+              <option value="Rufiji">Rufiji</option>
+              <option value="Internal">Internal</option>
+              <option value="Lake Tanganyika">Lake Tanganyika</option>
+              <option value="Wami / Ruvu">Wami / Ruvu</option>
+              <option value="Lake Nyasa">Lake Nyasa</option>
+              <option value="Ruvuma / Southern Coast">Ruvuma / Southern Coast</option>
+              <option value="Lake Rukwa">Lake Rukwa</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>Region</label>
+            <select name="region" id="region" required>
+              <option value="" selected disabled>Select Region</option>
+
+              <option value="Iringa">Iringa</option>
+              <option value="Shinyanga">Shinyanga </option>
+              <option value="Mbeya">Mbeya</option>
+              <option value="Kilimanjaro">Kilimanjaro</option>
+              <option value="Morogoro">Morogoro</option>
+              <option value="Arusha">Arusha</option>
+              <option value="Kagera">Kagera</option>
+              <option value="Mwanza">Mwanza</option>
+              <option value="Kigoma">Kigoma</option>
+              <option value="Ruvuma">Ruvuma</option>
+              <option value="Pwani">Pwani</option>
+              <option value="Tanga">Tanga</option>
+              <option value="Dodoma">Dodoma</option>
+              <option value="Singida">Singida</option>
+              <option value="Mara">Mara</option>
+              <option value="Tabora">Tabora</option>
+              <option value="Rukwa">Rukwa</option>
+              <option value="Mtwara">Mtwara</option>
+              <option value="Manyara">Manyara</option>
+              <option value="Lindi">Lindi</option>
+              <option value="Dar es Salaam">Dar es Salaam</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label for="lga">LGA</label>
+
+            <select name="lga" id="lga" required>
+                <option value="" selected disabled>Select LGA</option>
+
+                <option value="Ludewa">Ludewa</option>
+                <option value="Serengeti">Serengeti</option>
+                <option value="Simanjiro">Simanjiro</option>
+                <option value="Nanyumbu">Nanyumbu</option>
+                <option value="Karagwe">Karagwe</option>
+                <option value="Mkinga">Mkinga</option>
+                <option value="Shinyanga Rural">Shinyanga Rural</option>
+                <option value="Kahama">Kahama</option>
+                <option value="Tabora Urban">Tabora Urban</option>
+                <option value="Mkuranga">Mkuranga</option>
+                <option value="Namtumbo">Namtumbo</option>
+                <option value="Maswa">Maswa</option>
+                <option value="Siha">Siha</option>
+                <option value="Meatu">Meatu</option>
+                <option value="Sumbawanga Rural">Sumbawanga Rural</option>
+                <option value="Njombe">Njombe</option>
+                <option value="Ukerewe">Ukerewe</option>
+                <option value="Bariadi">Bariadi</option>
+                <option value="Same">Same</option>
+                <option value="Kigoma Rural">Kigoma Rural</option>
+                <option value="Moshi Rural">Moshi Rural</option>
+                <option value="Lindi Rural">Lindi Rural</option>
+                <option value="Rombo">Rombo</option>
+                <option value="Chamwino">Chamwino</option>
+                <option value="Bagamoyo">Bagamoyo</option>
+                <option value="Mafia">Mafia</option>
+                <option value="Arusha Rural">Arusha Rural</option>
+                <option value="Kyela">Kyela</option>
+                <option value="Kondoa">Kondoa</option>
+                <option value="Kilolo">Kilolo</option>
+                <option value="Kibondo">Kibondo</option>
+                <option value="Makete">Makete</option>
+                <option value="Singida Rural">Singida Rural</option>
+                <option value="Masasi">Masasi</option>
+                <option value="Rungwe">Rungwe</option>
+                <option value="Moshi Urban">Moshi Urban</option>
+                <option value="Geita">Geita</option>
+                <option value="Mbulu">Mbulu</option>
+                <option value="Bukoba Rural">Bukoba Rural</option>
+                <option value="Muheza">Muheza</option>
+                <option value="Lushoto">Lushoto</option>
+                <option value="Meru">Meru</option>
+                <option value="Iramba">Iramba</option>
+                <option value="Kilombero">Kilombero</option>
+                <option value="Mbarali">Mbarali</option>
+                <option value="Kasulu">Kasulu</option>
+                <option value="Bukoba Urban">Bukoba Urban</option>
+                <option value="Korogwe">Korogwe</option>
+                <option value="Bukombe">Bukombe</option>
+                <option value="Morogoro Rural">Morogoro Rural</option>
+                <option value="Kishapu">Kishapu</option>
+                <option value="Musoma Rural">Musoma Rural</option>
+                <option value="Sengerema">Sengerema</option>
+                <option value="Iringa Rural">Iringa Rural</option>
+                <option value="Muleba">Muleba</option>
+                <option value="Dodoma Urban">Dodoma Urban</option>
+                <option value="Ruangwa">Ruangwa</option>
+                <option value="Hanang">Hanang</option>
+                <option value="Misenyi">Misenyi</option>
+                <option value="Missungwi">Missungwi</option>
+                <option value="Songea Rural">Songea Rural</option>
+                <option value="Tanga">Tanga</option>
+                <option value="Tunduru">Tunduru</option>
+                <option value="Hai">Hai</option>
+                <option value="Mwanga">Mwanga</option>
+                <option value="Chato">Chato</option>
+                <option value="Biharamulo">Biharamulo</option>
+                <option value="Ileje">Ileje</option>
+                <option value="Mpwapwa">Mpwapwa</option>
+                <option value="Mvomero">Mvomero</option>
+                <option value="Bunda">Bunda</option>
+                <option value="Kiteto">Kiteto</option>
+                <option value="Longido">Longido</option>
+                <option value="Urambo">Urambo</option>
+                <option value="Mbozi">Mbozi</option>
+                <option value="Sikonge">Sikonge</option>
+                <option value="Ilala">Ilala</option>
+                <option value="Tarime">Tarime</option>
+                <option value="Temeke">Temeke</option>
+                <option value="Mbeya Rural">Mbeya Rural</option>
+                <option value="Magu">Magu</option>
+                <option value="Manyoni">Manyoni</option>
+                <option value="Igunga">Igunga</option>
+                <option value="Kilosa">Kilosa</option>
+                <option value="Babati">Babati</option>
+                <option value="Chunya">Chunya</option>
+                <option value="Mufindi">Mufindi</option>
+                <option value="Mtwara Rural">Mtwara Rural</option>
+                <option value="Ngara">Ngara</option>
+                <option value="Karatu">Karatu</option>
+                <option value="Mpanda">Mpanda</option>
+                <option value="Kibaha">Kibaha</option>
+                <option value="Singida Urban">Singida Urban</option>
+                <option value="Newala">Newala</option>
+                <option value="Nzega">Nzega</option>
+                <option value="Nkasi">Nkasi</option>
+                <option value="Bahi">Bahi</option>
+                <option value="Mbinga">Mbinga</option>
+                <option value="Ulanga">Ulanga</option>
+                <option value="Sumbawanga Urban">Sumbawanga Urban</option>
+                <option value="Morogoro Urban">Morogoro Urban</option>
+                <option value="Tandahimba">Tandahimba</option>
+                <option value="Kisarawe">Kisarawe</option>
+                <option value="Mtwara Urban">Mtwara Urban</option>
+                <option value="Kilwa">Kilwa</option>
+                <option value="Liwale">Liwale</option>
+                <option value="Kongwa">Kongwa</option>
+                <option value="Uyui">Uyui</option>
+                <option value="Rufiji">Rufiji</option>
+                <option value="Kwimba">Kwimba</option>
+                <option value="Monduli">Monduli</option>
+                <option value="Shinyanga Urban">Shinyanga Urban</option>
+                <option value="Ngorongoro">Ngorongoro</option>
+                <option value="Handeni">Handeni</option>
+                <option value="Rorya">Rorya</option>
+                <option value="Pangani">Pangani</option>
+                <option value="Lindi Urban">Lindi Urban</option>
+                <option value="Nachingwea">Nachingwea</option>
+                <option value="Kinondoni">Kinondoni</option>
+                <option value="Kigoma Urban">Kigoma Urban</option>
+                <option value="Ilemela">Ilemela</option>
+                <option value="Kilindi">Kilindi</option>
+                <option value="Arusha Urban">Arusha Urban</option>
+                <option value="Songea Urban">Songea Urban</option>
+                <option value="Nyamagana">Nyamagana</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label for="extraction_type">Extraction Type</label>
+
+            <select name="extraction_type" id="extraction_type" required>
+                <option value="" selected disabled>Select Extraction Type</option>
+
+                <option value="Gravity">Gravity</option>
+                <option value="Submersible">Submersible</option>
+                <option value="Swn 80">Swn 80</option>
+                <option value="Nira/Tanira">Nira/Tanira</option>
+                <option value="India Mark II">India Mark II</option>
+                <option value="Other">Other</option>
+                <option value="KSB">KSB</option>
+                <option value="Mono">Mono</option>
+                <option value="Windmill">Windmill</option>
+                <option value="Afridev">Afridev</option>
+                <option value="Rope Pump">Rope Pump</option>
+                <option value="India Mark III">India Mark III</option>
+                <option value="Swn 81">Swn 81</option>
+                <option value="Play Pump">Play Pump</option>
+                <option value="Cemo">Cemo</option>
+                <option value="Climax">Climax</option>
+                <option value="Walimi">Walimi</option>
+                <option value="Mkulima/Shinyanga">Mkulima/Shinyanga</option>
+            </select>
+        </div>
+
+        <!-- MANAGEMENT -->
+        <div class="input-group">
+            <label for="management">Management</label>
+
+            <select name="management" id="management" required>
+                <option value="" selected disabled>Select Management Type</option>
+
+                <option value="VWC">VWC</option>
+                <option value="WUG">WUG</option>
+                <option value="other">Other</option>
+                <option value="private operator">Private Operator</option>
+                <option value="water board">Water Board</option>
+                <option value="wua">WUA</option>
+                <option value="company">Company</option>
+                <option value="water authority">Water Authority</option>
+                <option value="parastatal">Parastatal</option>
+                <option value="unknown">Unknown</option>
+                <option value="School">School</option>
+                <option value="trust">Trust</option>
+            </select>
+        </div>
+
+        <!-- PAYMENT TYPE -->
+        <div class="input-group">
+            <label for="payment_type">Payment Type</label>
+
+            <select name="payment_type" id="payment_type" required>
+                <option value="" selected disabled>Select Payment Type</option>
+
+                <option value="annually">Annually</option>
+                <option value="never pay">Never Pay</option>
+                <option value="per bucket">Per Bucket</option>
+                <option value="unknown">Unknown</option>
+                <option value="on failure">On Failure</option>
+                <option value="other">Other</option>
+                <option value="monthly">Monthly</option>
+            </select>
+        </div>
+
+        <!-- WATER QUALITY -->
+        <div class="input-group">
+            <label for="water_quality">Water Quality</label>
+
+            <select name="water_quality" id="water_quality" required>
+                <option value="" selected disabled>Select Water Quality</option>
+
+                <option value="soft">Soft</option>
+                <option value="salty">Salty</option>
+                <option value="milky">Milky</option>
+                <option value="unknown">Unknown</option>
+                <option value="fluoride">Fluoride</option>
+                <option value="coloured">Coloured</option>
+                <option value="salty abandoned">Salty Abandoned</option>
+                <option value="fluoride abandoned">Fluoride Abandoned</option>
+            </select>
+        </div>
+
+        <!-- QUANTITY -->
+        <div class="input-group">
+            <label for="quantity">Quantity</label>
+
+            <select name="quantity" id="quantity" required>
+                <option value="" selected disabled>Select Quantity</option>
+
+                <option value="enough">Enough</option>
+                <option value="insufficient">Insufficient</option>
+                <option value="dry">Dry</option>
+                <option value="seasonal">Seasonal</option>
+                <option value="unknown">Unknown</option>
+            </select>
+        </div>
+
+        <!-- SOURCE TYPE -->
+        <div class="input-group">
+            <label for="source_type">Source Type</label>
+
+            <select name="source_type" id="source_type" required>
+                <option value="" selected disabled>Select Source Type</option>
+
+                <option value="spring">Spring</option>
+                <option value="rainwater harvesting">Rainwater Harvesting</option>
+                <option value="dam">Dam</option>
+                <option value="borehole">Borehole</option>
+                <option value="other">Other</option>
+                <option value="shallow well">Shallow Well</option>
+                <option value="river/lake">River/Lake</option>
+            </select>
+        </div>
+
+        <!-- WATERPOINT TYPE -->
+        <div class="input-group">
+            <label for="waterpoint_type">Waterpoint Type</label>
+
+            <select name="waterpoint_type" id="waterpoint_type" required>
+                <option value="" selected disabled>Select Waterpoint Type</option>
+
+                <option value="communal standpipe">Communal Standpipe</option>
+                <option value="communal standpipe multiple">Communal Standpipe Multiple</option>
+                <option value="hand pump">Hand Pump</option>
+                <option value="other">Other</option>
+                <option value="improved spring">Improved Spring</option>
+                <option value="cattle trough">Cattle Trough</option>
+                <option value="dam">Dam</option>
+            </select>
+        </div>
+
+        <!-- PUBLIC MEETING -->
+        <div class="input-group">
+            <label for="public_meeting">Public Meeting</label>
+
+            <select name="public_meeting" id="public_meeting" required>
+                <option value="" selected disabled>Select Option</option>
+
+                <option value="True">True</option>
+                <option value="False">False</option>
+                <option value="nan">Unknown</option>
+            </select>
+        </div>
+
+        <!-- PERMIT -->
+        <div class="input-group">
+            <label for="permit">Permit</label>
+
+            <select name="permit" id="permit" required>
+                <option value="" selected disabled>Select Option</option>
+
+                <option value="True">True</option>
+                <option value="False">False</option>
+                <option value="nan">Unknown</option>
+            </select>
+        </div>
+
+        <!-- Submit -->
+
+        <div class="button-container">
+            <button type="submit">Predict Status</button>
+        </div>
+
+    </form>
+
+    {% if prediction_text %}
+    <div class="result">
+         {{ prediction_text }}
+    </div>
+    {% endif %}
+
+</div>
+
+</body>
+</html>
