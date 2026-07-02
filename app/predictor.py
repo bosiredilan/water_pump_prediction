@@ -1,19 +1,16 @@
+from pathlib import Path
 import joblib
 
-pipeline = joblib.load("models/water_pump_pipeline.joblib")
+# project root
+BASE_DIR = Path(__file__).resolve().parent.parent
 
-# print("Pipeline Loaded Successfully")
+MODEL_PATH = BASE_DIR / "models" / "water_pump_pipeline.joblib"
+
+pipeline = joblib.load(MODEL_PATH)
 
 
 def make_prediction(df):
 
-    #print("\n========== BEFORE PIPELINE ==========")
-    #print(df)
-    #print(df.columns.tolist())
-
     prediction = pipeline.predict(df)
-
-    #print("\n========== AFTER PIPELINE ==========")
-    #print(prediction)
 
     return prediction[0]

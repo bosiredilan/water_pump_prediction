@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request
 import pandas as pd
 
-from predictor import make_prediction
+from .predictor import make_prediction
 
 app = Flask(__name__)
 
