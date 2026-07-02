@@ -384,10 +384,8 @@ scikit-learn==1.7.2
 Once deployed, the application can be accessed at:
 
 ```
-https://your-render-app-name.onrender.com
+https://water-pump-prediction-1.onrender.com
 ```
-
-------Replace the URL above with your deployed Render application.------
 
 ---
 
