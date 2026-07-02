@@ -424,7 +424,7 @@ Through this project I learned how to:
 
 Data Science | Machine Learning | Python
 
-GitHub: https://github.com/dilanbosire
+GitHub: https://github.com/bosiredilan
 
 LinkedIn: https://linkedin.com/in/bosiredilan
 
