@@ -381,7 +381,7 @@ scikit-learn==1.7.2
 
 # Live Demo
 
-Once deployed, the application can be accessed at:
+The application can be accessed at:
 
 ```
 https://water-pump-prediction-1.onrender.com
